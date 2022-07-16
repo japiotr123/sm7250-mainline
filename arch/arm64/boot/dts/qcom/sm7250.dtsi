@@ -14,6 +14,31 @@
 	interrupt-parent = <&intc>;
 	#address-cells = <2>;
 	#size-cells = <2>;
+	aliases {
+	display0 = &framebuffer0;
+	};
+	chosen {
+		bootargs = "nodebugmon quiet rcu_nocbs=0-7 noirqdebug printk.devkmsg=on rcupdate.rcu_normal_after_boot=1";
+                #address-cells = <2>;
+                #size-cells = <2>;
+                ranges;
+
+                stdout-path = "display0";
+
+                /*
+                 * Address and size extracted on-device using the following:
+                 * # strings /dev/block/bootdevice/by-name/xbl | grep 'Display Reserved'
+                 */
+                framebuffer0: framebuffer@a0000000 {
+                        compatible = "simple-framebuffer";
+                        reg = <0 0xA0000000 0 (1080 * 2400 * 4)>;
+                        width = <1080>;
+                        height = <2400>;
+                        stride = <(1080 * 4)>;
+                        format = "a8r8g8b8";
+			status = "okay";
+                };
+	};
 	clocks {
 		xo_board: xo-board {
 			compatible = "fixed-clock";
@@ -429,6 +454,16 @@
 			size = <0x0 0xA000000>;
 		};
 
+		cont_splash_memory: cont_splash_region {
+			reg = <0x0 0xA0000000 0x0 0x02300000>;
+			label = "cont_splash_region";
+			no-map;
+		};
+		disp_rdump_memory: disp_rdump_region@a0000000 {
+			reg = <0x0 0xA0000000 0x0 0x02300000>;
+			label = "disp_rdump_region";
+			no-map;
+		};
 		dfps_data_memory: dfps_data_region@a2300000 {
 			reg = <0x0 0xa2300000 0x0 0x0100000>;
 			label = "dfps_data_region";

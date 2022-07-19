@@ -585,6 +585,11 @@
 			qcom,drv-id = <2>;
 			qcom,tcs-config = <ACTIVE_TCS 2>, <SLEEP_TCS 3>,
 					  <WAKE_TCS 3>, <CONTROL_TCS 1>;
+
+			rpmhcc: qcom,rpmhclk {
+				compatible = "qcom,sm7250-rpmh-clk";
+				#clock-cells = <1>;
+			};
 		};
 	};
 
